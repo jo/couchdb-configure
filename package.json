@@ -1,0 +1,33 @@
+{
+  "name": "couchdb-configure",
+  "version": "1.0.0",
+  "description": "Configure CouchDB from file or directory.",
+  "main": "index.js",
+  "bin": "cli.js",
+  "scripts": {
+    "test": "tape test/index.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eHealthAfrica/couchdb-configure.git"
+  },
+  "keywords": [
+    "couchdb",
+    "bootstrap"
+  ],
+  "author": "Johannes J. Schmidt <schmidt@netzmerk.com> (http://die-tf.de/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/eHealthAfrica/couchdb-configure/issues"
+  },
+  "homepage": "https://github.com/eHealthAfrica/couchdb-configure#readme",
+  "dependencies": {
+    "async": "^1.1.0",
+    "couch-compile": "^1.3.0",
+    "nano": "^6.1.3"
+  },
+  "devDependencies": {
+    "tap-spec": "^4.0.0",
+    "tape": "^4.0.0"
+  }
+}

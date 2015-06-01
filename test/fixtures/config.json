@@ -1,0 +1,5 @@
+{
+  "couchdb-configure": {
+    "foo": "bar"
+  }
+}
