@@ -8,6 +8,8 @@ module.exports = function configure(url, source, callback) {
   compile(source, function(error, config) {
     var settings = Object.keys(config)
       .reduce(function(memo, key) {
+        if (typeof config[key] !== 'object') return memo
+
         var section = Object.keys(config[key])
           .map(function(k) {
             return {
