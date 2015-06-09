@@ -14,7 +14,7 @@ module.exports = function configure(url, source, callback) {
           .map(function(k) {
             return {
               path: encodeURIComponent(key) + '/' + encodeURIComponent(k),
-              value: config[key][k]
+              value: config[key][k].toString()
             }
           })
 
