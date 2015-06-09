@@ -23,7 +23,7 @@
   "homepage": "https://github.com/eHealthAfrica/couchdb-configure#readme",
   "dependencies": {
     "async": "^1.1.0",
-    "couchdb-compile": "^1.4.0",
+    "couchdb-compile": "^1.5.0",
     "nano": "^6.1.3"
   },
   "devDependencies": {
