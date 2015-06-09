@@ -1,6 +1,6 @@
 var nano = require('nano')
 var async = require('async')
-var compile = require('couch-compile')
+var compile = require('couchdb-compile')
 
 module.exports = function configure(url, source, callback) {
   var couch = nano(url)
