@@ -4,9 +4,6 @@ Configure CouchDB database server from filesystem.
 [![Build
 Status](https://travis-ci.org/eHealthAfrica/couchdb-configure.svg?branch=master)](https://travis-ci.org/eHealthAfrica/couchdb-configure)
 
-`source` is processed by [couchdb-compile](https://github.com/jo/couchdb-compile),
-so you can use a json file, node module or filesystem mapping.
-
 ## API
 
 ```js
