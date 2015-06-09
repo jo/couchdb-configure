@@ -7,7 +7,7 @@ var configure = require('../')
 
 
 var url = process.env.COUCH || 'http://localhost:5984'
-var couch = require('nano')(url)
+var couch = nano(url)
 
 
 // There is an issue with section deletion in CouchDB.
@@ -26,6 +26,13 @@ function clear(callback) {
     }, callback)
   })
 }
+
+test('use nano object as url', function(t) {
+  configure(couch, path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
+    t.notOk(error, 'no error occured')
+    t.end()
+  })
+})
 
 test('configure from json', function(t) {
   clear(function() {

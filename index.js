@@ -3,7 +3,7 @@ var async = require('async')
 var compile = require('couchdb-compile')
 
 module.exports = function configure(url, source, callback) {
-  var couch = nano(url)
+  var couch = typeof url.config === 'object' ? url : nano(url)
 
   compile(source, function(error, config) {
     var settings = Object.keys(config)
