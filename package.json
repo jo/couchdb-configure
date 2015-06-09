@@ -1,6 +1,6 @@
 {
   "name": "couchdb-configure",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Configure CouchDB from file or directory.",
   "main": "index.js",
   "bin": "cli.js",
