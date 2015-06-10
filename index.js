@@ -26,7 +26,31 @@ module.exports = function configure(url, source, callback) {
         method: 'PUT',
         path: '_config/' + setting.path,
         body: setting.value
-      }, next)
-    }, callback)
+      }, function(error, oldValue) {
+        if (error) return next(error)
+
+        next(null, {
+          path: setting.path,
+          value: setting.value,
+          oldValue: oldValue
+        })
+      })
+    }, function(error, responses) {
+      if (error) return callback(error)
+
+      var response = responses.reduce(function(memo, response) {
+        memo[response.path] = {
+          ok: true,
+          value: response.value
+        }
+        if (response.oldValue === response.value) {
+          memo[response.path].unchanged = true
+        }
+
+        return memo
+      }, {})
+
+      callback(null, response)
+    })
   })
 }
