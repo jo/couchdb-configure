@@ -5,7 +5,7 @@ var compile = require('couchdb-compile')
 module.exports = function configure(url, source, callback) {
   var couch = typeof url.config === 'object' ? url : nano(url)
 
-  compile(source, function(error, config) {
+  compile(source, { index: true }, function(error, config) {
     var settings = Object.keys(config)
       .reduce(function(memo, key) {
         if (typeof config[key] !== 'object') return memo
