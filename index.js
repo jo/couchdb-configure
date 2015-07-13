@@ -1,9 +1,9 @@
-var nano = require('nano')
+var nanoOption = require('nano-option')
 var async = require('async')
 var compile = require('couchdb-compile')
 
 module.exports = function configure(url, source, callback) {
-  var couch = typeof url.config === 'object' ? url : nano(url)
+  var couch = nanoOption(url)
 
   compile(source, { index: true }, function(error, config) {
     var settings = Object.keys(config)
