@@ -49,6 +49,36 @@ test('configure from json', function(t) {
   })
 })
 
+test('configure from commonjs', function(t) {
+  clear(function() {
+    configure(url, path.join(__dirname, 'fixtures', 'config.js'), function(error, responses) {
+      t.notOk(error, 'no error occured')
+
+      couch.request({
+        path: '_config/couchdb-configure/baz'
+      }, function(error, config) {
+        t.equal(config, 'foo')
+        t.end()
+      })
+    })
+  })
+})
+
+test('configure from commonjs/index', function(t) {
+  clear(function() {
+    configure(url, path.join(__dirname, 'fixtures', 'commonjs'), function(error, responses) {
+      t.notOk(error, 'no error occured')
+
+      couch.request({
+        path: '_config/couchdb-configure/bar'
+      }, function(error, config) {
+        t.equal(config, 'baz')
+        t.end()
+      })
+    })
+  })
+})
+
 test('configure from filesystem', function(t) {
   clear(function() {
     configure(url, path.join(__dirname, 'fixtures', 'config'), function(error, responses) {
