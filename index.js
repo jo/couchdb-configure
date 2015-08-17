@@ -1,9 +1,13 @@
 var nanoOption = require('nano-option')
 var async = require('async')
 var compile = require('couchdb-compile')
+var assert = require('assert')
 
 module.exports = function configure(url, source, callback) {
   var couch = nanoOption(url)
+
+  assert(typeof couch.request === 'function',
+    'URL must point to the root of a CouchDB server (not to a database).')
 
   compile(source, { index: true }, function(error, config) {
     var settings = Object.keys(config)
