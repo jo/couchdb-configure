@@ -18,6 +18,8 @@ function clear(callback) {
   couch.request({
     path: '_config/couchdb-configure'
   }, function(error, config) {
+    if (error) return callback(error)
+
     async.map(Object.keys(config), function(key, next) {
       couch.request({
         method: 'DELETE',
@@ -29,15 +31,17 @@ function clear(callback) {
 
 test('use nano object as url', function(t) {
   configure(couch, path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
-    t.notOk(error, 'no error occured')
+    t.error(error, 'no error occured')
     t.end()
   })
 })
 
 test('configure from json', function(t) {
-  clear(function() {
+  clear(function(error) {
+    t.error(error, 'no error occured')
+
     configure(url, path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
-      t.notOk(error, 'no error occured')
+      t.error(error, 'no error occured')
 
       couch.request({
         path: '_config/couchdb-configure/foo'
@@ -50,9 +54,11 @@ test('configure from json', function(t) {
 })
 
 test('configure from commonjs', function(t) {
-  clear(function() {
+  clear(function(error) {
+    t.error(error, 'no error occured')
+
     configure(url, path.join(__dirname, 'fixtures', 'config.js'), function(error, responses) {
-      t.notOk(error, 'no error occured')
+      t.error(error, 'no error occured')
 
       couch.request({
         path: '_config/couchdb-configure/baz'
@@ -65,9 +71,11 @@ test('configure from commonjs', function(t) {
 })
 
 test('configure from commonjs/index', function(t) {
-  clear(function() {
+  clear(function(error) {
+    t.error(error, 'no error occured')
+
     configure(url, path.join(__dirname, 'fixtures', 'commonjs'), function(error, responses) {
-      t.notOk(error, 'no error occured')
+      t.error(error, 'no error occured')
 
       couch.request({
         path: '_config/couchdb-configure/bar'
@@ -80,9 +88,11 @@ test('configure from commonjs/index', function(t) {
 })
 
 test('configure from filesystem', function(t) {
-  clear(function() {
+  clear(function(error) {
+    t.error(error, 'no error occured')
+
     configure(url, path.join(__dirname, 'fixtures', 'config'), function(error, responses) {
-      t.notOk(error, 'no error occured')
+      t.error(error, 'no error occured')
 
       couch.request({
         path: '_config/couchdb-configure/foo'
