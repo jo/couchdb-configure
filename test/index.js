@@ -29,7 +29,21 @@ function clear(callback) {
   })
 }
 
-test('use nano object as url', function(t) {
+test('use url', function(t) {
+  configure(url, path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
+    t.error(error, 'no error occured')
+    t.end()
+  })
+})
+
+test('use url with trailing slash', function(t) {
+  configure(url + '/', path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
+    t.error(error, 'no error occured')
+    t.end()
+  })
+})
+
+test('use nano object', function(t) {
   configure(couch, path.join(__dirname, 'fixtures', 'config.json'), function(error, responses) {
     t.error(error, 'no error occured')
     t.end()
