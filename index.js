@@ -3,19 +3,23 @@ var async = require('async')
 var compile = require('couchdb-compile')
 var assert = require('assert')
 
-module.exports = function configure(url, source, callback) {
+module.exports = function configure (url, source, callback) {
   var couch = nanoOption(url)
 
   assert(typeof couch.request === 'function',
     'URL must point to the root of a CouchDB server (not to a database).')
 
-  compile(source, { index: true }, function(error, config) {
+  compile(source, { index: true }, function (error, config) {
+    if (error) {
+      return callback(error)
+    }
+
     var settings = Object.keys(config)
-      .reduce(function(memo, key) {
+      .reduce(function (memo, key) {
         if (typeof config[key] !== 'object') return memo
 
         var section = Object.keys(config[key])
-          .map(function(k) {
+          .map(function (k) {
             return {
               path: encodeURIComponent(key) + '/' + encodeURIComponent(k),
               value: config[key][k].toString()
@@ -25,12 +29,12 @@ module.exports = function configure(url, source, callback) {
         return memo.concat(section)
       }, [])
 
-    async.map(settings, function(setting, next) {
+    async.map(settings, function (setting, next) {
       couch.request({
         method: 'PUT',
         path: '_config/' + setting.path,
         body: setting.value
-      }, function(error, oldValue) {
+      }, function (error, oldValue) {
         if (error) return next(error)
 
         next(null, {
@@ -39,10 +43,10 @@ module.exports = function configure(url, source, callback) {
           oldValue: oldValue
         })
       })
-    }, function(error, responses) {
+    }, function (error, responses) {
       if (error) return callback(error)
 
-      var response = responses.reduce(function(memo, response) {
+      var response = responses.reduce(function (memo, response) {
         memo[response.path] = {
           ok: true,
           value: response.value
