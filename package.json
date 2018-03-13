@@ -6,11 +6,11 @@
   "scripts": {
     "test": "tap --reporter=spec test/index.js",
     "pretest": "standard",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eHealthAfrica/couchdb-configure.git"
+    "url": "https://github.com/jo/couchdb-configure.git"
   },
   "keywords": [
     "couchdb",
@@ -19,9 +19,9 @@
   "author": "Johannes J. Schmidt <schmidt@netzmerk.com> (http://die-tf.de/)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/eHealthAfrica/couchdb-configure/issues"
+    "url": "https://github.com/jo/couchdb-configure/issues"
   },
-  "homepage": "https://github.com/eHealthAfrica/couchdb-configure#readme",
+  "homepage": "https://github.com/jo/couchdb-configure#readme",
   "dependencies": {
     "async": "^2.6.0",
     "couchdb-compile": "^1.10.0",
@@ -32,5 +32,6 @@
     "semantic-release": "^15.0.3",
     "standard": "^11.0.0",
     "tap": "^11.1.2"
-  }
+  },
+  "version": "0.0.0-development"
 }
