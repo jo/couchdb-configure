@@ -10,6 +10,8 @@ node_js:
   - '6'
 after_success:
   - npm run travis-deploy-once "npm run semantic-release"
+services:
+  - couchdb
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
