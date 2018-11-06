@@ -32,7 +32,7 @@ module.exports = function configure (url, source, callback) {
     async.map(settings, function (setting, next) {
       couch.request({
         method: 'PUT',
-        path: '_config/' + setting.path,
+        path: '_node/_local/_config/' + setting.path,
         body: setting.value
       }, function (error, oldValue) {
         if (error) return next(error)
