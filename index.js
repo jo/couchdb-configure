@@ -65,14 +65,14 @@ module.exports = function configure (url, source, callback) {
           path: '_membership'
         }, function (error, result) {
           if (error) { return done(error) } else {
-            const configPaths = result.all_nodes.map((node) => {
-              return `_node/${node}/_config/`
+            const configTasks = result.all_nodes.map((node) => {
+              return writeConfig.bind(null, `_node/${node}/_config/`)
             })
-            return async.map(configPaths, writeConfig, done)
+            return async.series(configTasks, done)
           }
         })
       } else {
-        return writeConfig(settings, '_config/', done)
+        return writeConfig('_config/', done)
       }
     },
     (responses, done) => {
