@@ -43,22 +43,37 @@ module.exports = function configure (url, source, callback) {
       ], done)
     },
     ([ version, settings ], done) => {
-      const configPath = version > '2' ? '_node/_local/_config/' : '_config/'
-      async.map(settings, (setting, next) => {
-        couch.request({
-          method: 'PUT',
-          path: configPath + setting.path,
-          body: setting.value
-        }, function (error, oldValue) {
-          if (error) return next(error)
+      function writeConfig (configPath, done) {
+        async.map(settings, (setting, done) => {
+          couch.request({
+            method: 'PUT',
+            path: configPath + setting.path,
+            body: setting.value
+          }, function (error, oldValue) {
+            if (error) return done(error)
 
-          next(null, {
-            path: setting.path,
-            value: setting.value,
-            oldValue: oldValue
+            done(null, {
+              path: setting.path,
+              value: setting.value,
+              oldValue: oldValue
+            })
           })
+        }, done)
+      }
+      if (version > '2') {
+        couch.request({
+          path: '_membership'
+        }, function (error, result) {
+          if (error) { return done(error) } else {
+            const configPaths = result.all_nodes.map((node) => {
+              return `_node/${node}/_config/`
+            })
+            return async.map(configPaths, writeConfig, done)
+          }
         })
-      }, done)
+      } else {
+        return writeConfig(settings, '_config/', done)
+      }
     },
     (responses, done) => {
       var response = responses.reduce(function (memo, response) {
