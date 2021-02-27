@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "nano": "^6.4.3",
-    "semantic-release": "^15.0.3",
+    "semantic-release": "^17.2.3",
     "standard": "^11.0.0",
     "tap": "^14.10.7",
     "travis-deploy-once": "^4.4.0"
