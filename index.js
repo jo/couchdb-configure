@@ -9,43 +9,73 @@ module.exports = function configure (url, source, callback) {
   assert(typeof couch.request === 'function',
     'URL must point to the root of a CouchDB server (not to a database).')
 
-  compile(source, { index: true }, function (error, config) {
-    if (error) {
-      return callback(error)
-    }
-
-    var settings = Object.keys(config)
-      .reduce(function (memo, key) {
-        if (typeof config[key] !== 'object') return memo
-
-        var section = Object.keys(config[key])
-          .map(function (k) {
-            return {
-              path: encodeURIComponent(key) + '/' + encodeURIComponent(k),
-              value: config[key][k].toString()
-            }
+  async.waterfall([
+    (done) => {
+      async.series([
+        (done) => {
+          couch.request({ path: '' }, (error, result) => {
+            if (error) { return done(error) }
+            return done(null, result.version)
           })
+        },
+        (done) => {
+          async.waterfall([
+            compile.bind(null, source, { index: true }),
+            (config, done) => {
+              var settings = Object.keys(config)
+                .reduce(function (memo, key) {
+                  if (typeof config[key] !== 'object') return memo
 
-        return memo.concat(section)
-      }, [])
+                  var section = Object.keys(config[key])
+                    .map(function (k) {
+                      return {
+                        path: encodeURIComponent(key) + '/' + encodeURIComponent(k),
+                        value: config[key][k].toString()
+                      }
+                    })
 
-    async.map(settings, function (setting, next) {
-      couch.request({
-        method: 'PUT',
-        path: '_config/' + setting.path,
-        body: setting.value
-      }, function (error, oldValue) {
-        if (error) return next(error)
+                  return memo.concat(section)
+                }, [])
+              return done(null, settings)
+            }
+          ], done)
+        }
+      ], done)
+    },
+    ([ version, settings ], done) => {
+      function writeConfig (configPath, done) {
+        async.map(settings, (setting, done) => {
+          couch.request({
+            method: 'PUT',
+            path: configPath + setting.path,
+            body: setting.value
+          }, function (error, oldValue) {
+            if (error) return done(error)
 
-        next(null, {
-          path: setting.path,
-          value: setting.value,
-          oldValue: oldValue
+            done(null, {
+              path: setting.path,
+              value: setting.value,
+              oldValue: oldValue
+            })
+          })
+        }, done)
+      }
+      if (version > '2') {
+        couch.request({
+          path: '_membership'
+        }, function (error, result) {
+          if (error) { return done(error) } else {
+            const configTasks = result.all_nodes.map((node) => {
+              return writeConfig.bind(null, `_node/${node}/_config/`)
+            })
+            return async.series(configTasks, done)
+          }
         })
-      })
-    }, function (error, responses) {
-      if (error) return callback(error)
-
+      } else {
+        return writeConfig('_config/', done)
+      }
+    },
+    (responses, done) => {
       var response = responses.reduce(function (memo, response) {
         memo[response.path] = {
           ok: true,
@@ -57,8 +87,7 @@ module.exports = function configure (url, source, callback) {
 
         return memo
       }, {})
-
-      callback(null, response)
-    })
-  })
+      return done(null, response)
+    }
+  ], callback)
 }
