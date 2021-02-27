@@ -1,9 +1,6 @@
 # CouchDB Configure
 Configure CouchDB database server from filesystem.
 
-[![Build
-Status](https://travis-ci.org/jo/couchdb-configure.svg?branch=master)](https://travis-ci.org/jo/couchdb-configure)
-
 ## API
 
 ```js
