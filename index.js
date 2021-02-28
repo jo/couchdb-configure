@@ -1,10 +1,10 @@
-var nanoOption = require('nano-option')
-var async = require('async')
-var compile = require('couchdb-compile')
-var assert = require('assert')
+const nanoOption = require('nano-option')
+const async = require('async')
+const compile = require('couchdb-compile')
+const assert = require('assert')
 
 module.exports = function configure (url, source, callback) {
-  var couch = nanoOption(url)
+  const couch = nanoOption(url)
 
   assert(typeof couch.request === 'function',
     'URL must point to the root of a CouchDB server (not to a database).')
@@ -22,11 +22,11 @@ module.exports = function configure (url, source, callback) {
           async.waterfall([
             compile.bind(null, source, { index: true }),
             (config, done) => {
-              var settings = Object.keys(config)
+              const settings = Object.keys(config)
                 .reduce(function (memo, key) {
                   if (typeof config[key] !== 'object') return memo
 
-                  var section = Object.keys(config[key])
+                  const section = Object.keys(config[key])
                     .map(function (k) {
                       return {
                         path: encodeURIComponent(key) + '/' + encodeURIComponent(k),
@@ -42,7 +42,7 @@ module.exports = function configure (url, source, callback) {
         }
       ], done)
     },
-    ([ version, settings ], done) => {
+    ([version, settings], done) => {
       function writeConfig (configPath, done) {
         async.map(settings, (setting, done) => {
           couch.request({
@@ -76,7 +76,7 @@ module.exports = function configure (url, source, callback) {
       }
     },
     (responses, done) => {
-      var response = responses.reduce(function (memo, response) {
+      const response = responses.reduce(function (memo, response) {
         memo[response.path] = {
           ok: true,
           value: response.value

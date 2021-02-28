@@ -1,12 +1,12 @@
-var test = require('tap').test
-var path = require('path')
-var async = require('async')
-var nano = require('nano')
+const test = require('tap').test
+const path = require('path')
+const async = require('async')
+const nano = require('nano')
 
-var configure = require('../')
+const configure = require('../')
 
-var url = process.env.COUCH || 'http://localhost:5984'
-var couch = nano(url)
+const url = process.env.COUCH || 'http://localhost:5984'
+const couch = nano(url)
 
 // get couchdb version to set _config path
 const configPaths = []
