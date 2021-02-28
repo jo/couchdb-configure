@@ -68,7 +68,9 @@ module.exports = function configure (url, source, callback) {
             const configTasks = result.all_nodes.map((node) => {
               return writeConfig.bind(null, `_node/${node}/_config/`)
             })
-            return async.series(configTasks, done)
+            return async.series(configTasks, function (error, responses) {
+              done(error, responses[0])
+            })
           }
         })
       } else {
