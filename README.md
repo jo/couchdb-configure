@@ -1,6 +1,8 @@
 # CouchDB Configure
 Configure CouchDB database server from filesystem.
 
+ok
+
 ## API
 
 ```js
